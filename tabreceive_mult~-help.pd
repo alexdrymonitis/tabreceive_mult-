@@ -1,0 +1,84 @@
+#N canvas 526 95 1112 780 10;
+#N canvas 0 50 450 250 (subpatch) 0;
+#X array summed_output 512 float 2;
+#X coords 0 1 512 -1 200 140 1;
+#X restore 277 331 graph;
+#X obj 21 434 metro 100;
+#X floatatom 12 214 5 0 0 2 amp - -, f 5;
+#X obj 27 25 cnv 15 420 50 empty empty empty 0 -12 0 14 -204786 -66577
+0;
+#X text 31 30 [tabreceive_mult~]: an external which receives values
+from multiple tables with an amplitude coefficient and a ramp time
+;
+#X text 30 87 [tabreceive_mult~] is like [tabreceive~] only it can
+receive values from any number of tables simultaneously. The values
+it receives are accumulated in its outlet. Each received table values
+can have their own amplitude coefficient as well as their own ramp
+time (the received values can get to their set amplitude in a [line~]
+fashion).;
+#X obj 12 233 pack f f;
+#X floatatom 65 214 5 0 0 2 ramp - -, f 5;
+#X msg 12 258 set tab_a \$1 \$2;
+#X floatatom 142 214 5 0 0 0 - - -, f 5;
+#X obj 142 233 pack f f;
+#X floatatom 195 214 5 0 0 0 - - -, f 5;
+#X msg 142 258 set tab_b \$1 \$2;
+#X floatatom 272 214 5 0 0 0 - - -, f 5;
+#X obj 272 233 pack f f;
+#X floatatom 325 214 5 0 0 0 - - -, f 5;
+#X msg 272 258 set tab_c \$1 \$2;
+#X obj 22 522 loadbang;
+#X obj 22 544 t b b;
+#X text 22 499 set some static waveforms for the first two tables;
+#X obj 22 705 array define tab_c 64;
+#X obj 22 679 array define tab_b;
+#X obj 22 653 array define tab_a;
+#X obj 12 458 tabwrite~ summed_output;
+#X floatatom 409 523 5 0 0 0 - - -, f 5;
+#X obj 409 542 osc~ 300;
+#X obj 409 564 tabsend~ tab_c;
+#X text 406 498 and an oscillator to the third;
+#X msg 132 348 remove tab_c;
+#X msg 122 325 remove tab_b;
+#X msg 109 300 remove tab_a;
+#X obj 12 382 tabreceive_mult~ tab_a 1 1000;
+#X text 576 44 Arguments:;
+#X text 638 66 1st (optional): array name to receive values from;
+#X text 639 86 2nd (optional): amplitude for the array values;
+#X text 639 108 3rd (optional): ramp time for the amplitude;
+#X text 601 153 Inlet:;
+#X text 638 174 message "set <tabname> <ampval> <ramptime>. as with
+the arguments \, the "set" message can contain any of the three elements
+\, but with the above order (if none is contained then nothing will
+happen);
+#X text 639 239 message "remove <tabname> removes an array from the
+object;
+#X text 600 279 Outlet:;
+#X text 647 301 summed values of the arrays the object is receiving
+from;
+#X obj 21 411 loadbang;
+#X msg 54 570 \; tab_b sinesum 64 1;
+#X msg 22 608 \; tab_a sinesum 32 1 0.5 0.3333 0.25 \, normalize;
+#X connect 1 0 23 0;
+#X connect 2 0 6 0;
+#X connect 6 0 8 0;
+#X connect 7 0 6 1;
+#X connect 8 0 31 0;
+#X connect 9 0 10 0;
+#X connect 10 0 12 0;
+#X connect 11 0 10 1;
+#X connect 12 0 31 0;
+#X connect 13 0 14 0;
+#X connect 14 0 16 0;
+#X connect 15 0 14 1;
+#X connect 16 0 31 0;
+#X connect 17 0 18 0;
+#X connect 18 0 43 0;
+#X connect 18 1 42 0;
+#X connect 24 0 25 0;
+#X connect 25 0 26 0;
+#X connect 28 0 31 0;
+#X connect 29 0 31 0;
+#X connect 30 0 31 0;
+#X connect 31 0 23 0;
+#X connect 41 0 1 0;
